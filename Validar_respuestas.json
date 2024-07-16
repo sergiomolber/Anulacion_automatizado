@@ -537,12 +537,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseurl}}/{{txRef}}/reject",
+					"raw": "{{base-url}}/transfer/{{transferId}}/reject",
 					"host": [
-						"{{baseurl}}"
+						"{{base-url}}"
 					],
 					"path": [
-						"{{txRef}}",
+						"transfer",
+						"{{transferId}}",
 						"reject"
 					]
 				}
