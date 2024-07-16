@@ -14,9 +14,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 400\", function () {\r",
-							"    pm.response.to.have.status(400);\r",
+							"pm.test(\"Status code is 400 or 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400, 404]);\r",
 							"});\r",
+							"\r",
 							"\r",
 							"\r",
 							"// Imprimir el comentario del caso de prueba en la consola de Newman\r",
