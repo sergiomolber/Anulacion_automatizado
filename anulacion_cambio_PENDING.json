@@ -1,13 +1,14 @@
 {
 	"info": {
-		"_postman_id": "b375b8d8-a085-4fe7-b044-ab9d669f7cdd",
+		"_postman_id": "c9a7633b-74a0-4242-891a-64aa986ffbd1",
 		"name": "anulacion cambio PENDING",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "34404218"
+		"_exporter_id": "29460625",
+		"_collection_link": "https://red-satellite-829132.postman.co/workspace/anulacion~56bc220a-7b29-48ca-a4d2-044b53ce19a9/collection/29460625-c9a7633b-74a0-4242-891a-64aa986ffbd1?action=share&source=collection_link&creator=29460625"
 	},
 	"item": [
 		{
-			"name": "Transfer Management PENDING",
+			"name": "Transfer Management diferente a estado PENDING",
 			"event": [
 				{
 					"listen": "test",
@@ -70,14 +71,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{base-url}}/ext/transfiya/v1/packages",
+					"raw": "{{base-url}}/packages",
 					"host": [
 						"{{base-url}}"
 					],
 					"path": [
-						"ext",
-						"transfiya",
-						"v1",
 						"packages"
 					]
 				}
@@ -410,7 +408,7 @@
 			]
 		},
 		{
-			"name": "CALLBACK PENDING",
+			"name": "CALLBACK cambiar estado diferente a PENDING",
 			"event": [
 				{
 					"listen": "test",
@@ -474,7 +472,7 @@
 			"response": []
 		},
 		{
-			"name": "Rechazo correcto transferencia PENDING",
+			"name": "Rechazo de transferencia diferente a estadoPENDING",
 			"event": [
 				{
 					"listen": "test",
