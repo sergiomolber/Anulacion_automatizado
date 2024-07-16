@@ -500,7 +500,7 @@
 							"    pm.expect(jsonData.data.status).to.be.a(\"string\");\r",
 							"    pm.expect(jsonData.data.source).to.be.a(\"string\");\r",
 							"    pm.expect(jsonData.data.target).to.be.a(\"string\");\r",
-							"    pm.expect(jsonData.data.amount).to.be.a(\"number\");\r",
+							"    pm.expect(jsonData.data.amount).to.be.a(\"string\");\r",
 							"    pm.expect(jsonData.data.description).to.be.a(\"string\");\r",
 							"    pm.expect(jsonData.data.targetBank).to.be.a(\"string\");\r",
 							"    pm.expect(jsonData.data.merchantId).to.be.a(\"string\");\r",
@@ -602,7 +602,7 @@
 				"header": [
 					{
 						"key": "message-uid",
-						"value": ""
+						"value": "probando"
 					},
 					{
 						"key": "api-key",
@@ -618,12 +618,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{base-url}}/{{transferId}}}/reject",
+					"raw": "{{base-url}}/transfer/XqCCzHWlj5QFlfx/reject",
 					"host": [
 						"{{base-url}}"
 					],
 					"path": [
-						"{{transferId}}}",
+						"transfer",
+						"XqCCzHWlj5QFlfx",
 						"reject"
 					]
 				}
