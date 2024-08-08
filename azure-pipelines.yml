@@ -13,12 +13,18 @@ steps:
 - checkout: self
 
 - powershell: |
+    if (-not (Test-Path -Path 'allure-results')) {
+      New-Item -ItemType Directory -Path 'allure-results' | Out-Null
+    }
     if (Test-Path -Path 'allure-results') {
       Remove-Item -Recurse -Force 'allure-results'
     }
-  displayName: 'Limpiar entornos'
+  displayName: 'Limpiar y crear directorios'
 
 - powershell: |
+    if (-not (Test-Path -Path 'allure-results')) {
+      New-Item -ItemType Directory -Path 'allure-results' | Out-Null
+    }
     $executorContent = @"
     {
         "name": "Azure DevOps",
@@ -30,6 +36,9 @@ steps:
   displayName: 'Setup'
 
 - powershell: |
+    if (-not (Test-Path -Path 'allure-results')) {
+      New-Item -ItemType Directory -Path 'allure-results' | Out-Null
+    }
     $environmentContent = @"
     {
         "Operating System": "Windows",
@@ -83,7 +92,7 @@ steps:
 - powershell: |
     $smtpServer = 'smtp.example.com'
     $smtpFrom = 'achjenkinsnewman@gmail.com'
-    $smtpTo = 'molinabernal@gmail.com'
+    $smtpTo = 'molinabernal@gmail.com, svalle@achcolombia.com.co'
     $messageSubject = 'Resultado Microservicios Automatización'
     $messageBody = 'Resultados de la ejecución del lanzamiento de los microservicios de transfiya'
     $attachment = 'allure-report\Anulacion_report.zip'
