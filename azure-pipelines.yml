@@ -12,6 +12,14 @@ variables:
 steps:
 - checkout: self
 
+- script: |
+    npm install -g newman
+  displayName: 'Instalar Newman'
+
+- script: |
+    npm install -g node
+  displayName: 'Instalar Node.js'
+
 - powershell: |
     if (-not (Test-Path -Path 'allure-results')) {
       New-Item -ItemType Directory -Path 'allure-results' | Out-Null
@@ -49,8 +57,11 @@ steps:
     $environmentContent | Out-File -FilePath 'allure-results/environment.json' -Encoding utf8
   displayName: 'Create Environment File'
 
+- script: |
+    newman --version
+  displayName: 'Verificar versión de Newman'
+
 - powershell: |
-    $newmanPath = "$(NEWMAN_HOME)\newman"
     $testScripts = @(
       "anulacion_happypath.json",
       "Anulacion_401.json",
@@ -66,7 +77,7 @@ steps:
 
     foreach ($testScript in $testScripts) {
       try {
-        & $newmanPath run $testScript -g globals.json -e environment.json -r allure --insecure
+        & newman run $testScript -g globals.json -e environment.json -r allure --insecure
       } catch {
         Write-Host "Error al ejecutar una prueba con Newman: $_"
       }
