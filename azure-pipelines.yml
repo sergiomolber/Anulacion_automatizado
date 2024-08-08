@@ -10,9 +10,15 @@ variables:
   NODE_HOME: 'C:\Program Files\nodejs'
 
 steps:
+- checkout: self
 
+- powershell: |
+    if (Test-Path -Path 'allure-results') {
+      Remove-Item -Recurse -Force 'allure-results'
+    }
+  displayName: 'Limpiar entornos'
 
-- script: |
+- powershell: |
     $executorContent = @"
     {
         "name": "Azure DevOps",
@@ -23,7 +29,7 @@ steps:
     $executorContent | Out-File -FilePath 'allure-results/executor.json' -Encoding utf8
   displayName: 'Setup'
 
-- script: |
+- powershell: |
     $environmentContent = @"
     {
         "Operating System": "Windows",
@@ -34,7 +40,7 @@ steps:
     $environmentContent | Out-File -FilePath 'allure-results/environment.json' -Encoding utf8
   displayName: 'Create Environment File'
 
-- script: |
+- powershell: |
     $newmanPath = "$(NEWMAN_HOME)\newman"
     $testScripts = @(
       "anulacion_happypath.json",
@@ -58,12 +64,12 @@ steps:
     }
   displayName: 'Ejecutar Pruebas con Newman'
 
-- script: |
+- powershell: |
     allure generate allure-results --clean
     Rename-Item 'allure-report\index.html' 'Anulacion_report.html'
   displayName: 'Crear reporte html con Newman'
 
-- script: |
+- powershell: |
     Compress-Archive -Path 'allure-report\Anulacion_report.html' -DestinationPath 'allure-report\Anulacion_report.zip'
   displayName: 'Comprimir Reporte'
 
@@ -74,8 +80,7 @@ steps:
     publishLocation: 'Container'
   displayName: 'Publicar Artifacts'
 
-- script: |
-    # Usar PowerShell para enviar el correo electrónico
+- powershell: |
     $smtpServer = 'smtp.example.com'
     $smtpFrom = 'achjenkinsnewman@gmail.com'
     $smtpTo = 'molinabernal@gmail.com'
