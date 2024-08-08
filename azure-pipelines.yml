@@ -10,13 +10,7 @@ variables:
   NODE_HOME: 'C:\Program Files\nodejs'
 
 steps:
-- checkout: self
 
-- script: |
-    if (Test-Path -Path 'allure-results') {
-      Remove-Item -Recurse -Force 'allure-results'
-    }
-  displayName: 'Limpiar entornos'
 
 - script: |
     $executorContent = @"
