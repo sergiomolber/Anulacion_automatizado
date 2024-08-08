@@ -14,11 +14,12 @@ steps:
 
 - script: |
     npm install -g newman
-  displayName: 'Instalar Newman'
+    npm install -g newman-reporter-allure
+  displayName: 'Instalar Newman y reporter de Allure'
 
 - script: |
-    npm install -g node
-  displayName: 'Instalar Node.js'
+    npm list -g newman-reporter-allure
+  displayName: 'Verificar reporter de Allure'
 
 - powershell: |
     if (-not (Test-Path -Path 'allure-results')) {
