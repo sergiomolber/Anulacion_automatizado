@@ -10,10 +10,7 @@ variables:
   NODE_HOME: 'C:\Program Files\nodejs'
 
 steps:
-- task: Checkout@2
-  inputs:
-    repository: 'https://github.com/sergiomolber/Anulacion_automatizado.git'
-    clean: true
+- checkout: self
 
 - script: |
     if (Test-Path -Path 'allure-results') {
@@ -68,19 +65,6 @@ steps:
   displayName: 'Ejecutar Pruebas con Newman'
 
 - script: |
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "anulacion_happypath.json" -g "globals.json" -e "environment.json" -r "allure" --insecure
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "Anulacion_401.json" -d "Errores_401.csv" -g "globals.json" -r "allure" --insecure
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "Anulacion_validar_mesageuid.json" -d "Data_Messageuid.csv" -g "globals.json" -r "allure" --insecure
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "Anulacion_transferid.json" -d "Data_TransferId.csv" -g "globals.json" -r "allure" --insecure
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "anulacion_cambio_ACCEPT.json" -e "environment.json" -g "globals.json" -r "allure" --insecure
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "anulacion_cambio_PENDING.json" -e "environment.json" -g "globals.json" -r "allure" --insecure
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "anulacion_estado_vacio.json" -g "globals.json" -e "environment.json" -r "allure" --insecure
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "Anulacion_sin_enviar.json" -g "globals.json" -r "allure" --insecure
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "Validar_respuestas.json" -g "globals.json" -r "allure" --insecure
-    & "$(NODE_HOME)\node_modules\newman\bin\newman.js" run "Anulacion_transferencia_ya_anulada.json" -g "globals.json" -e "environment.json" -r "allure" --insecure
-  displayName: 'Ejecutar Pruebas con Newman'
-
-- script: |
     allure generate allure-results --clean
     Rename-Item 'allure-report\index.html' 'Anulacion_report.html'
   displayName: 'Crear reporte html con Newman'
@@ -89,11 +73,30 @@ steps:
     Compress-Archive -Path 'allure-report\Anulacion_report.html' -DestinationPath 'allure-report\Anulacion_report.zip'
   displayName: 'Comprimir Reporte'
 
-- task: SendMail@2
+- task: PublishBuildArtifacts@1
   inputs:
-    To: 'molinabernal@gmail.com, svalle@achcolombia.com.co'
-    Subject: 'Resultado Microservicios Automatización'
-    Body: 'Resultados de la ejecución del lanzamiento de los microservicios de transfiya'
-    Attachments: 'allure-report/Anulacion_report.zip'
-    From: 'achjenkinsnewman@gmail.com'
+    PathtoPublish: 'allure-report'
+    ArtifactName: 'AnulacionReport'
+    publishLocation: 'Container'
+  displayName: 'Publicar Artifacts'
+
+- script: |
+    # Usar PowerShell para enviar el correo electrónico
+    $smtpServer = 'smtp.example.com'
+    $smtpFrom = 'achjenkinsnewman@gmail.com'
+    $smtpTo = 'molinabernal@gmail.com'
+    $messageSubject = 'Resultado Microservicios Automatización'
+    $messageBody = 'Resultados de la ejecución del lanzamiento de los microservicios de transfiya'
+    $attachment = 'allure-report\Anulacion_report.zip'
+
+    $message = New-Object system.net.mail.mailmessage
+    $message.from = $smtpFrom
+    $message.To.add($smtpTo)
+    $message.Subject = $messageSubject
+    $message.Body = $messageBody
+    $attachment = New-Object System.Net.Mail.Attachment($attachment)
+    $message.Attachments.Add($attachment)
+
+    $smtp = New-Object Net.Mail.SmtpClient($smtpServer)
+    $smtp.Send($message)
   displayName: 'Enviar correo con reporte'
